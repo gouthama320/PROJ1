@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheet.css">
+  <title>DB Project 1</title>
+</head>
+<body>
+  <main>
+    <h2>Sign Up</h2>
+    <label>Username:</label>
+    <input type="text" id="signup-username">
+    <br><br>
+    <label>Password:</label>
+    <input type="password" id="signup-password">
+    <br><br>
+    <button id="signup-btn">Sign Up</button>
+
+    <br><br><br>
+
+    <h2>Login</h2>
+    <label>Username:</label>
+    <input type="text" id="user-input">
+    <br><br>
+    <label>Password:</label>
+    <input type="password" id="pass-input">
+    <br><br>
+    <button id="login-btn">Login</button>
+
+    <br><br><br>
+
+    <h2>Add and Manage Names</h2>
+    <label>Name:</label>
+    <input type="text" id="name-input">
+    <button id="add-name-btn">Add Name</button>
+
+    <br><br><br>
+
+    <div>
+      <input placeholder="Search by name" id="search-input">
+      <button id="search-btn">Search</button>
+    </div>
+
+    <table id="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Date Added</th>
+          <th>Delete</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <section hidden id="update-row">
+      <label>Name:</label>
+      <input type="text" id="update-name-input">
+      <button id="update-row-btn" value="">Update</button>
+    </section>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
