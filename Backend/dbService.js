@@ -15,10 +15,10 @@ console.log("DATABASE: " + process.env.DATABASE);
 console.log("DB PORT: " + process.env.DB_PORT);
 
 const connection = mysql.createConnection({
-     host: process.env.HOST,
+     host: process.env.DB_HOST,
      user: process.env.DB_USER,        
-     password: process.env.PASSWORD,
-     database: process.env.DATABASE,
+     password: process.env.DB_PASSWORD,
+     database: process.env.DB_DATABASE,
      port: process.env.DB_PORT
 });
 
@@ -207,14 +207,33 @@ class DbService{
       }
   }
 
-  insertNewUser(username, password) {
-    return new Promise((resolve, reject) => {
-        const query = "INSERT INTO users (username, password) VALUES (?, ?);";
-        connection.query(query, [username, password], (err, result) => {
-            if (err) reject(err);
-            resolve(result.insertId);
+  async insertNewUser(username, password) {
+    try {
+        // check if username exists
+        const existing = await new Promise((resolve, reject) => {
+            const query = "SELECT * FROM users WHERE username = ?";
+            connection.query(query, [username], (err, results) => {
+                if(err) reject(err);
+                else resolve(results);
+            });
         });
-    });
+
+        if(existing.length > 0) throw new Error("Username already exists");
+
+        // insert new user
+        const insertId = await new Promise((resolve, reject) => {
+            const query = "INSERT INTO users (username, password) VALUES (?, ?);";
+            connection.query(query, [username, password], (err, result) => {
+                if(err) reject(err);
+                else resolve(result.insertId);
+            });
+        });
+
+        return { id: insertId, username };
+
+    } catch(err) {
+        throw err;
+    }
 }
 }
 

@@ -317,3 +317,32 @@ function loadHTMLTable(data){
     .catch(err => console.error(err));
 });
 }
+document.addEventListener('DOMContentLoaded', function() {
+    const signupBtn = document.querySelector("#signup-btn");
+    signupBtn.addEventListener("click", () => {
+        const username = document.querySelector("#signup-username").value.trim();
+        const password = document.querySelector("#signup-password").value.trim();
+
+        if (!username || !password) {
+            alert("Please enter both username and password.");
+            return;
+        }
+
+        fetch("http://localhost:5050/addUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("User created successfully!");
+                document.querySelector("#signup-username").value = "";
+                document.querySelector("#signup-password").value = "";
+            } else {
+                alert("Error: " + (data.error || "Unknown error"));
+            }
+        })
+        .catch(err => console.error("Signup error:", err));
+    });
+});
