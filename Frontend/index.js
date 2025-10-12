@@ -1,4 +1,3 @@
-
 // This is the frontEnd that modifies the HTML page directly
 // event-based programming,such as document load, click a button
 
@@ -251,32 +250,6 @@ function loadHTMLTable(data){
         return;
     }
   
-    /*
-    In the following JavaScript code, the forEach method is used to iterate over the 
-    elements of the data array. The forEach method is a higher-order function 
-    that takes a callback function as its argument. The callback function is 
-    executed once for each element in the array.
-    
-    In this case, the callback function takes a single argument, which is an object 
-    destructuring pattern:
-
-
-    function ({id, name, date_added}) {
-        // ... code inside the callback function
-    }
-
-    This pattern is used to extract the id, name, and date_added properties from each 
-    element of the data array. The callback function is then executed for each element
-    in the array, and within the function, you can access these properties directly 
-    as variables (id, name, and date_added).
-
-    
-    In summary, the forEach method is a convenient way to iterate over each element in 
-    an array and perform some operation or execute a function for each element. 
-    The provided callback function is what gets executed for each element in the 
-    data array.
-    */
-
     let tableHtml = "";
     data.forEach(function ({id, name, date_added}){
          tableHtml += "<tr>";
@@ -289,34 +262,10 @@ function loadHTMLTable(data){
     });
 
     table.innerHTML = tableHtml;
-
-    document.querySelector("#signup-btn").addEventListener("click", () => {
-    const username = document.querySelector("#signup-username").value.trim();
-    const password = document.querySelector("#signup-password").value.trim();
-
-    if (!username || !password) {
-        alert("Please enter both username and password.");
-        return;
-    }
-
-    fetch("http://localhost:5050/addUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("User created successfully!");
-            document.querySelector("#signup-username").value = "";
-            document.querySelector("#signup-password").value = "";
-        } else {
-            alert("Error creating user.");
-        }
-    })
-    .catch(err => console.error(err));
-});
 }
+
+
+// ✅ Keep only ONE signup event listener
 document.addEventListener('DOMContentLoaded', function() {
     const signupBtn = document.querySelector("#signup-btn");
     signupBtn.addEventListener("click", () => {
