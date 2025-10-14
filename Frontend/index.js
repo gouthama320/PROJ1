@@ -295,3 +295,33 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(err => console.error("Signup error:", err));
     });
 });
+
+// Login page event listener for username & password input fields
+document.addEventListener("DOMContentLoaded", function() {
+    const loginBtn = document.querySelector("#login-btn");
+
+    loginBtn.addEventListener("click", () => {
+        const username = document.querySelector("#user-input").value.trim();
+        const password = document.querySelector("#pass-input").value.trim();
+
+        if (!username || !password) {
+            alert("The username and/or password was not entered.");
+            return;
+        }
+
+        fetch("http://localhost:5050/loginUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Login successful!");
+            } else {
+                alert("Login failed: " + (data.error || "Unknown username or password"));
+            }
+        })
+        .catch(err => console.error("Login error:", err));
+    });
+});

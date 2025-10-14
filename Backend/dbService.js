@@ -235,6 +235,25 @@ class DbService{
         throw err;
     }
 }
+
+async loginUser(username, password) {
+    try {
+        // Attempt to find the username & password combination in the database
+        const result = await new Promise((resolve, reject) => {
+            const query = "SELECT * FROM users WHERE username = ? AND password = ?";
+            connection.query(query, [username, password], (err, results) => {
+                if (err) reject(err);
+                else resolve(results.length > 0);
+            });
+        });
+
+        if (result) return { success: true };
+        else return { success: false, error: "Unknown username or password" };
+    } catch (err) {
+        console.error("Login error:", err);
+        return { success: false, error: "Database error" };
+    }
+}
 }
 
 module.exports = DbService;

@@ -117,6 +117,18 @@ app.post('/addUser', (request, response) => {
       });
 });
 
+app.post("/loginUser", (request, response) => {
+    console.log("app: loginUser called.");
+    const { username, password } = request.body;
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.loginUser(username, password);
+
+    result
+      .then(data => response.json(data))
+      .catch(err => console.log(err));
+});
+
 // if we configure here directly
 app.listen(5050, 
     () => {
