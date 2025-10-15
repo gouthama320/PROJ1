@@ -171,15 +171,27 @@ class DbService{
 
   async loginUser(username, password) {
     try {
-        const result = await new Promise((resolve, reject) => {
+        // Login query, succeeding upon correct username & password combination
+        const loginResult = await new Promise((resolve, reject) => {
             const query = "SELECT * FROM users WHERE username = ? AND password = ?";
             connection.query(query, [username, password], (err, results) => {
                 if (err) reject(err);
                 else resolve(results.length > 0);
             });
         });
-
-        if (result) return { success: true };
+        
+        // Set the last_login value to the current timestamp only after successfully logging in
+        if (loginResult) {
+            await new Promise((resolve, reject) => {
+                const query = "UPDATE users SET last_login = CURRENT_TIMESTAMP() WHERE username = ?";
+                connection.query(query, [username], (err, results) => {
+                    if (err) reject(err);
+                    else resolve(results.length > 0);
+                });
+            });
+        
+            return { success: true };
+        }
         else return { success: false, error: "Unknown username or password" };
     } catch (err) {
         console.error("Login error:", err);

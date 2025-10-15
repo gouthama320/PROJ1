@@ -307,6 +307,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Login page event listener for username & password input fields
 document.addEventListener("DOMContentLoaded", function() {
     const loginBtn = document.querySelector("#login-btn");
+    const loggedInSection = document.querySelector("#logged-in-section");
+    const loggedInMessage = document.querySelector("#logged-in-message");
+    const logoutBtn = document.querySelector("#logout-btn");
 
     loginBtn.addEventListener("click", () => {
         const username = document.querySelector("#user-input").value.trim();
@@ -325,11 +328,31 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert("Login successful!");
+                localStorage.setItem("loggedInUser", username); // WIP to keep the user logged in upon refreshing the page
+                updateUI();
             } else {
                 alert("Login failed: " + (data.error || "Unknown username or password"));
             }
         })
         .catch(err => console.error("Login error:", err));
+        
+        // Log out button event listen
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("loggedInUser");
+            updateUI();
+        });
+        
+        // Show/hide the logout button and logged in message based on user login status
+        function updateUI() {
+            const currentUser = localStorage.getItem("loggedInUser");
+            if (currentUser) {
+                loggedInSection.style.display = "block";
+                loggedInMessage.textContent = `You are logged in, ${currentUser}!`;
+            } else {
+                loggedInSection.style.display = "none";
+            }
+        }
+
+        updateUI();
     });
 });
