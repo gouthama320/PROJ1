@@ -269,23 +269,31 @@ function loadHTMLTable(data){
 document.addEventListener('DOMContentLoaded', function() {
     const signupBtn = document.querySelector("#signup-btn");
     signupBtn.addEventListener("click", () => {
+        const first_name = document.querySelector("#signup-firstname").value.trim();
+        const last_name = document.querySelector("#signup-lastname").value.trim();
+        const age = document.querySelector("#signup-age").value.trim();
+        const salary = document.querySelector("#signup-salary").value.trim();
         const username = document.querySelector("#signup-username").value.trim();
         const password = document.querySelector("#signup-password").value.trim();
 
-        if (!username || !password) {
-            alert("Please enter both username and password.");
+        if (!first_name || !last_name || !age || !salary || !username || !password) {
+            alert("Please fill out all fields.");
             return;
         }
 
         fetch("http://localhost:5050/addUser", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password, first_name, last_name, age, salary })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert("User created successfully!");
+                document.querySelector("#signup-firstname").value = "";
+                document.querySelector("#signup-lastname").value = "";
+                document.querySelector("#signup-age").value = "";
+                document.querySelector("#signup-salary").value = "";
                 document.querySelector("#signup-username").value = "";
                 document.querySelector("#signup-password").value = "";
             } else {
