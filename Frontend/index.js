@@ -84,6 +84,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.success) {
                 localStorage.setItem("loggedInUser", username); // If login is successful, keep the user logged in
                 updateUI();
+
+            // Clear login input fields
+            document.querySelector("#user-input").value = "";
+            document.querySelector("#pass-input").value = "";
             } else {
                 alert("Login failed: " + (data.error || "Unknown username or password"));
             }

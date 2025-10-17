@@ -2,6 +2,7 @@
 
 const mysql = require('mysql');
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt'); // for password hashing
 dotenv.config(); // read from .env file
 
 let instance = null; 
@@ -36,67 +37,74 @@ class DbService{
         return instance? instance: new DbService();
     }
 
-  async insertNewUser(first_name, last_name, age, salary, username, password) {
-    try {
-        // check if username exists
-        const existing = await new Promise((resolve, reject) => {
-            const query = "SELECT * FROM users WHERE username = ?";
-            connection.query(query, [username], (err, results) => {
-                if(err) reject(err);
-                else resolve(results);
-            });
-        });
-
-        if(existing.length > 0) throw new Error("Username already exists");
-
-        // insert new user
-        const insertId = await new Promise((resolve, reject) => {
-            const query = `
-                INSERT INTO users (first_name, last_name, age, salary, username, password, signup_date)
-                VALUES (?, ?, ?, ?, ?, ?, NOW());
-            `;
-            connection.query(query, [first_name, last_name, age, salary, username, password], (err, result) => {
-                if(err) reject(err);
-                else resolve(result.insertId);
-            });
-        });
-
-        return { id: insertId, username, first_name, last_name, age, salary };
-
-    } catch(err) {
-        throw err;
-    }
-  }
-
-  async loginUser(username, password) {
-    try {
-        // Login query, succeeding upon correct username & password combination
-        const loginResult = await new Promise((resolve, reject) => {
-            const query = "SELECT * FROM users WHERE username = ? AND password = ?";
-            connection.query(query, [username, password], (err, results) => {
-                if (err) reject(err);
-                else resolve(results.length > 0);
-            });
-        });
+    async insertNewUser(first_name, last_name, age, salary, username, password) {
         
-        // Set the last_login value to the current timestamp only after successfully logging in
-        if (loginResult) {
-            await new Promise((resolve, reject) => {
-                const query = "UPDATE users SET last_login = CURRENT_TIMESTAMP() WHERE username = ?";
+        try {
+            // check if username exists
+            const existing = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM users WHERE username = ?";
                 connection.query(query, [username], (err, results) => {
-                    if (err) reject(err);
-                    else resolve(results.length > 0);
+                    if(err) reject(err);
+                    else resolve(results);
                 });
             });
-        
-            return { success: true };
+
+            if(existing.length > 0) throw new Error("Username already exists");
+
+            // Password hashing with 10 salt rounds
+            const password_hash = await bcrypt.hash(password, 10);
+
+            // insert new user
+            const insertId = await new Promise((resolve, reject) => {
+                const query = `
+                    INSERT INTO users (first_name, last_name, age, salary, username, password, signup_date)
+                    VALUES (?, ?, ?, ?, ?, ?, NOW());
+                `;
+                connection.query(query, [first_name, last_name, age, salary, username, password_hash], (err, result) => {
+                    if(err) reject(err);
+                    else resolve(result.insertId);
+                });
+            });
+
+            return { id: insertId, username, first_name, last_name, age, salary };
+
+        } catch(err) {
+            throw err;
         }
-        else return { success: false, error: "Unknown username or password" };
-    } catch (err) {
-        console.error("Login error:", err);
-        return { success: false, error: "Database error" };
     }
-  }
+
+    async loginUser(username, password) {
+        try {
+            // Login query, succeeding upon correct username
+            const loginResult = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM users WHERE username = ?";
+                connection.query(query, [username], (err, results) => {
+                    if (err) reject(err);
+                    else resolve(results[0]);
+                });
+            });
+
+            if (!loginResult) return { success: false, error: "Unknown username" };
+
+            // Compare entered password to stored hash
+            const passwordMatch = await bcrypt.compare(password, loginResult.password);
+            if (!passwordMatch) return { success: false, error: "Unknown password" };
+
+            // Set the last_login value to the current timestamp only after successfully logging in
+            await new Promise((resolve, reject) => {
+                const query = "UPDATE users SET last_login = CURRENT_TIMESTAMP() WHERE username = ?";
+                connection.query(query, [username], (err, ) => {
+                    if (err) reject(err);
+                    else resolve();
+                });
+            });
+            
+            return { success: true, username };
+        } catch (err) {
+            console.error("Login error:", err);
+            return { success: false, error: "Database error" };
+        }
+    }
 }
 
 module.exports = DbService;
