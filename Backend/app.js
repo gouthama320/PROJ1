@@ -17,73 +17,8 @@ app.use(express.urlencoded({extended: false}));
 // Serve the frontend by manually defining the Frontend folder path
 app.use(express.static(path.join(__dirname, '../Frontend')));
 
-// create
-app.post('/insert', (request, response) => {
-    console.log("app: insert a row.");
-    const {name} = request.body;
-    const db = dbService.getDbServiceInstance();
-
-    const result = db.insertNewName(name);
- 
-    result 
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-// read 
-app.get('/getAll', (request, response) => {
-    const db = dbService.getDbServiceInstance();
-    const result =  db.getAllData(); 
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-app.get('/search/:name', (request, response) => {
-    const {name} = request.params;
-    console.log(name);
-
-    const db = dbService.getDbServiceInstance();
-
-    let result;
-    if(name === "all")
-       result = db.getAllData()
-    else 
-       result =  db.searchByName(name); 
-
-    result
-    .then(data => response.json({data: data}))
-    .catch(err => console.log(err));
-});
-
-// update
-app.patch('/update', (request, response) => {
-    console.log("app: update is called");
-    const{id, name} = request.body;
-    const db = dbService.getDbServiceInstance();
-
-    const result = db.updateNameById(id, name);
-
-    result.then(data => response.json({success: true}))
-    .catch(err => console.log(err)); 
-});
-
-// delete service
-app.delete('/delete/:id', (request, response) => {     
-    const {id} = request.params;
-    console.log("delete");
-    console.log(id);
-    const db = dbService.getDbServiceInstance();
-
-    const result = db.deleteRowById(id);
-
-    result.then(data => response.json({success: true}))
-    .catch(err => console.log(err));
-});  
-
 // add new user with first_name, last_name, age, salary
 app.post('/addUser', (request, response) => {
-    console.log("app: addUser called.");
     const { first_name, last_name, age, salary, username, password } = request.body;
     const db = dbService.getDbServiceInstance();
 
@@ -98,7 +33,6 @@ app.post('/addUser', (request, response) => {
 });
 
 app.post("/loginUser", (request, response) => {
-    console.log("app: loginUser called.");
     const { username, password } = request.body;
     const db = dbService.getDbServiceInstance();
 
@@ -109,7 +43,6 @@ app.post("/loginUser", (request, response) => {
       .catch(err => console.log(err));
 });
 
-// if we configure here directly
+// Listen on the fixed port: 5050
 app.listen(5050, () => {
-    console.log("I am listening on the fixed port 5050.")
 });
