@@ -43,6 +43,39 @@ app.post("/loginUser", (request, response) => {
       .catch(err => console.log(err));
 });
 
+app.get('/search/:userid', (request, response) => {
+    const {userid} = request.params;
+
+    const db = dbService.getDbServiceInstance();
+
+    const result =  db.userIdSearch(userid); 
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+// Request is unused, needs to be there so it doesn't think the response is a request and throws an error
+app.get('/nullLogin', (request, response) => {
+    const db = dbService.getDbServiceInstance();
+
+    const result =  db.nullLoginSearch(); 
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+app.get('/signupToday', (request, response) => {
+    const db = dbService.getDbServiceInstance();
+
+    const result =  db.registeredTodaySearch(); 
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
 // Listen on the fixed port: 5050
 app.listen(5050, () => {
 });

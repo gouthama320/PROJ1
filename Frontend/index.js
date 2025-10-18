@@ -47,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // Show/hide the logout button and logged in message based on user login status
     function updateUI() {
         const currentUser = localStorage.getItem("loggedInUser");
-        console.log(currentUser);
         if (currentUser) {
             loggedInSection.style.display = "block";
             loggedInMessage.textContent = `You are logged in, ${currentUser}!`;
@@ -95,3 +94,56 @@ document.addEventListener("DOMContentLoaded", function() {
         .catch(err => console.error("Login error:", err));
     });
 });
+
+// Userid search button event listener 
+const useridSearchBtn =  document.querySelector('#useridSearch-btn');
+useridSearchBtn.onclick = function (){
+    const useridSearchInput = document.querySelector('#userid-search');
+    const useridSearchValue = useridSearchInput.value;
+    useridSearchValue.value = "";
+
+    fetch('http://localhost:5050/search/' + useridSearchValue)
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+}
+
+// Users that never logged in search button event listener 
+const nullLoginSearchBtn =  document.querySelector('#nullLoginSearch-btn');
+nullLoginSearchBtn.onclick = function (){
+    fetch('http://localhost:5050/nullLogin')
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+}
+
+// Users that signed up today search button event listener 
+const signupTodaySearchBtn =  document.querySelector('#signupTodaySearch-btn');
+signupTodaySearchBtn.onclick = function (){
+    fetch('http://localhost:5050/signupToday')
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+}
+
+function searchResultsTable(data){
+    const table = document.querySelector('table tbody'); 
+    
+    if(data.length === 0){
+        table.innerHTML = "<tr><td class='no-data' colspan='8'>No Data</td></tr>";
+        return;
+    }
+
+    let tableHtml = "";
+    data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
+        tableHtml += "<tr>";
+        tableHtml +=`<td>${username}</td>`;
+        tableHtml +=`<td>${password}</td>`;
+        tableHtml +=`<td>${first_name}</td>`;
+        tableHtml +=`<td>${last_name}</td>`;
+        tableHtml +=`<td>${salary}</td>`;
+        tableHtml +=`<td>${age}</td>`;
+        tableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`; // Format signup_date as MM/DD/YYYY
+        tableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`; // Format last_login as MM/DD/YYYY, HH:MM:SS AM/PM
+        tableHtml += "</tr>";
+    });
+
+    table.innerHTML = tableHtml;
+}

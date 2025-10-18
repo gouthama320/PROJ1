@@ -100,9 +100,62 @@ class DbService{
             });
             
             return { success: true, username };
-        } catch (err) {
-            console.error("Login error:", err);
-            return { success: false, error: "Database error" };
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    async userIdSearch(userid){
+        try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT * FROM users where username = ?;";
+                     connection.query(query, [userid], (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+             );
+             return response;
+
+         } catch(err) {
+            throw err;
+        }
+    }
+
+    async nullLoginSearch(){
+        try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT * FROM users WHERE last_login IS NULL;";
+                     connection.query(query, (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+             );
+             return response;
+
+         } catch(err) {
+            throw err;
+        }
+    }
+
+    async registeredTodaySearch(){
+        try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT * FROM users WHERE signup_date = CURRENT_DATE();";
+                     connection.query(query, (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+             );
+             return response;
+
+         } catch(err) {
+            throw err;
         }
     }
 }

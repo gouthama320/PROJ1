@@ -9,7 +9,7 @@
 <body>
   <main>
     <h1><u>DB PROJECT 1:</u></h1>
-
+    
     <h2>Sign Up</h2>
     <label>First Name:</label>
     <input type="text" id="signup-firstname">
@@ -48,6 +48,34 @@
     <h2 id="logged-in-message"></h2>
     <button id="logout-btn">Sign Out</button>
     </div>
+
+    <label>Search by userid:</label>
+    <input type="text" id="userid-search">
+    <button id="useridSearch-btn">Search</button>
+    <br><br>
+    <label>Search by age range:</label>
+    <input type="number" id="minAge-search" min="1">
+    <input type="number" id="maxAge-search">
+    <button id="ageSearch-btn">Search</button>
+    <br><br>
+    <label>Search for users who never logged in:</label>
+    <button id="nullLoginSearch-btn">Search</button>
+    <br><br>
+    <label>Search for users who signed up today:</label>
+    <button id="signupTodaySearch-btn">Search</button>
+    <table id="search-results">
+      <thead>
+          <th>Username</th>
+          <th>Password</th>
+          <th>first_name</th>
+          <th>last_name</th>
+          <th>salary</th>
+          <th>age</th>
+          <th>signup_date</th>
+          <th>last_login</th>
+      </thead>
+      <tbody></tbody>
+    </table>
   </main>
 
   <script src="index.js"></script>
