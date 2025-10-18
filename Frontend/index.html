@@ -63,6 +63,28 @@
     <br><br>
     <label>Search for users who signed up today:</label>
     <button id="signupTodaySearch-btn">Search</button>
+    <br><br>
+    <label>Search by first and/or last name:</label>
+    <input type="text" id="firstName-search" placeholder="First name">
+    <input type="text" id="lastName-search" placeholder="Last name">
+    <button id="nameSearch-btn">Search</button>
+
+    <br><br>
+    <label>Search by salary range:</label>
+    <input type="number" id="minSalary-search" placeholder="Min salary">
+    <input type="number" id="maxSalary-search" placeholder="Max salary">
+    <button id="salarySearch-btn">Search</button>
+
+    <br><br>
+    <label>Search users who registered after a given username:</label>
+    <input type="text" id="afterUser-search" placeholder="Enter username">
+    <button id="afterUserSearch-btn">Search</button>
+
+    <br><br>
+    <label>Search users who registered on the same day as a given username:</label>
+    <input type="text" id="sameDayUser-search" placeholder="Enter username">
+    <button id="sameDayUserSearch-btn">Search</button>
+
     <table id="search-results">
       <thead>
           <th>Username</th>

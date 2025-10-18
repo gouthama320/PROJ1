@@ -158,6 +158,85 @@ class DbService{
             throw err;
         }
     }
+
+    async searchByName(first_name, last_name) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                let query = "SELECT * FROM users WHERE 1=1";
+                const params = [];
+                if (first_name) {
+                    query += " AND first_name LIKE ?";
+                    params.push(`%${first_name}%`);
+                }
+                if (last_name) {
+                    query += " AND last_name LIKE ?";
+                    params.push(`%${last_name}%`);
+                }
+                connection.query(query, params, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    else resolve(results);
+                });
+            });
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async searchBySalaryRange(minSalary, maxSalary) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM users WHERE salary BETWEEN ? AND ?;";
+                connection.query(query, [minSalary, maxSalary], (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    else resolve(results);
+                });
+            });
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async searchRegisteredAfterUser(userid) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = `
+                    SELECT * FROM users 
+                    WHERE signup_date > (
+                        SELECT signup_date FROM users WHERE username = ?
+                    );
+                `;
+                connection.query(query, [userid], (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    else resolve(results);
+                });
+            });
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async searchRegisteredSameDayUser(userid) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = `
+                    SELECT * FROM users 
+                    WHERE DATE(signup_date) = (
+                        SELECT DATE(signup_date) FROM users WHERE username = ?
+                    );
+                `;
+                connection.query(query, [userid], (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    else resolve(results);
+                });
+            });
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    }
 }
 
 module.exports = DbService;

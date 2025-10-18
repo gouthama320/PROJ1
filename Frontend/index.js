@@ -123,6 +123,48 @@ signupTodaySearchBtn.onclick = function (){
     .then(data => searchResultsTable(data['data']));
 }
 
+// Search by first and/or last name
+const nameSearchBtn = document.querySelector('#nameSearch-btn');
+nameSearchBtn.onclick = function () {
+    const firstName = document.querySelector('#firstName-search').value.trim();
+    const lastName = document.querySelector('#lastName-search').value.trim();
+
+    fetch(`http://localhost:5050/searchByName?first_name=${firstName}&last_name=${lastName}`)
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+};
+
+// Search users whose salary is between X and Y
+const salarySearchBtn = document.querySelector('#salarySearch-btn');
+salarySearchBtn.onclick = function () {
+    const minSalary = document.querySelector('#minSalary-search').value.trim();
+    const maxSalary = document.querySelector('#maxSalary-search').value.trim();
+
+    fetch(`http://localhost:5050/searchBySalaryRange?minSalary=${minSalary}&maxSalary=${maxSalary}`)
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+};
+
+// Search users registered after John (userid)
+const afterUserSearchBtn = document.querySelector('#afterUserSearch-btn');
+afterUserSearchBtn.onclick = function () {
+    const userid = document.querySelector('#afterUser-search').value.trim();
+
+    fetch(`http://localhost:5050/searchRegisteredAfter/${userid}`)
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+};
+
+// Search users registered same day as John (userid)
+const sameDayUserSearchBtn = document.querySelector('#sameDayUserSearch-btn');
+sameDayUserSearchBtn.onclick = function () {
+    const userid = document.querySelector('#sameDayUser-search').value.trim();
+
+    fetch(`http://localhost:5050/searchRegisteredSameDay/${userid}`)
+    .then(response => response.json())
+    .then(data => searchResultsTable(data['data']));
+};
+
 function searchResultsTable(data){
     const table = document.querySelector('table tbody'); 
     
@@ -130,6 +172,7 @@ function searchResultsTable(data){
         table.innerHTML = "<tr><td class='no-data' colspan='8'>No Data</td></tr>";
         return;
     }
+
 
     let tableHtml = "";
     data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
