@@ -1,3 +1,10 @@
+// Clear all input fields on page reload
+document.addEventListener("DOMContentLoaded", function() {
+    const inputFields = document.querySelectorAll("input");
+    inputFields.forEach(input => input.value = "");
+});
+
+// Sign up event listener
 document.addEventListener('DOMContentLoaded', function() {
     const signupBtn = document.querySelector("#signup-btn");
     signupBtn.addEventListener("click", () => {
@@ -50,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const profileName = document.querySelector("#profile-name");
         const queriesSection = document.querySelector("#queries-section");
         const queryResults = document.querySelector("#query-results");
+        const queryBody = document.querySelector('#query-results tbody');
 
         if (currentUser) {
             authSection.style.display = "none"; // Hide Sign Up & Login sections when logged in
@@ -58,21 +66,28 @@ document.addEventListener("DOMContentLoaded", function() {
             profileName.textContent = currentUser; // Set the profile name in the profile section to the logged in username
             logoutBtn.style.display = "none"; // Hide the log out button by default when logged in
             queryResults.style.display = "table"; // Show the query results table
+            if (queryBody) queryBody.innerHTML = ''; // Clear the query results table on login
         } else {
             authSection.style.display = "block"; // Show Sign Up & Login section when not logged in
             profileSection.style.display = "none"; // Hide the profile section
             queriesSection.style.display = "none"; // Hide the queries section
             queryResults.style.display = "none"; // Hide the query results table
+            if (queryBody) queryBody.innerHTML = ''; // Clear the query results table on sign out 
         }
     }
 
     // Check the login in status on page load
     updateUI();
 
+    // Toggle off the log out button when clicking on the page document
+    document.addEventListener("click", () => {
+        logoutBtn.style.display = "none";
+    });
+
     // Clicking the profile section (with the icon & username) toggles the logout button
-    profileToggle.addEventListener("click", () => {
-    logoutBtn.style.display =
-        logoutBtn.style.display === "none" ? "inline-block" : "none";
+    profileToggle.addEventListener("click", (event) => {
+        event.stopPropagation(); // Exception to the document event listener above since the profile section should toggle the log out button
+        logoutBtn.style.display = logoutBtn.style.display === "none" ? "inline-block" : "none";
     });
     
     // Log out button event listener
@@ -120,7 +135,6 @@ const useridSearchBtn =  document.querySelector('#useridSearch-btn');
 useridSearchBtn.onclick = function (){
     const useridSearchInput = document.querySelector('#userid-search');
     const useridSearchValue = useridSearchInput.value;
-    useridSearchValue.value = "";
 
     fetch('http://localhost:5050/searchUserId/' + useridSearchValue)
     .then(response => response.json())
@@ -225,29 +239,29 @@ sameDayUserSearchBtn.onclick = function () {
     .catch(err => console.error("Users registered after john search error:", err));
 };
 
-function searchResultsTable(data){
-    const table = document.querySelector('table tbody'); 
+function searchResultsTable(query_data){
+    const queryResultsTable = document.querySelector('#query-results tbody'); 
     
-    if(data.length === 0){
-        table.innerHTML = "<tr><td class='no-data' colspan='8'>No Data</td></tr>";
+    if(query_data.length === 0){
+        queryResultsTable.innerHTML = "<tr><td class='no-data' colspan='8'>No Data</td></tr>";
         return;
     }
 
-    let tableHtml = "";
-    data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
-        tableHtml += "<tr>";
-        tableHtml +=`<td>${username}</td>`;
-        tableHtml +=`<td>${password}</td>`;
-        tableHtml +=`<td>${first_name}</td>`;
-        tableHtml +=`<td>${last_name}</td>`;
-        tableHtml +=`<td>${salary}</td>`;
-        tableHtml +=`<td>${age}</td>`;
+    let queryTableHtml = "";
+    query_data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
+        queryTableHtml += "<tr>";
+        queryTableHtml +=`<td>${username}</td>`;
+        queryTableHtml +=`<td>${password}</td>`;
+        queryTableHtml +=`<td>${first_name}</td>`;
+        queryTableHtml +=`<td>${last_name}</td>`;
+        queryTableHtml +=`<td>${salary}</td>`;
+        queryTableHtml +=`<td>${age}</td>`;
         // Format signup_date as MM/DD/YYYY
-        tableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`;
+        queryTableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`;
         // Ternary operation to format last_login as "MM/DD/YYYY, HH:MM:SS AM/PM" for users that have signed in or "NULL" if not
-        tableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`;
-        tableHtml += "</tr>";
+        queryTableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`;
+        queryTableHtml += "</tr>";
     });
 
-    table.innerHTML = tableHtml;
+    queryResultsTable.innerHTML = queryTableHtml;
 }
