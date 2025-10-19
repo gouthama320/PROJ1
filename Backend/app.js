@@ -90,7 +90,7 @@ app.get('/signupToday', (request, response) => {
     .catch(err => console.log(err));
 });
 
-// 🔍 Search users by first and/or last name
+// Search users by first and/or last name
 app.get('/searchByName', (request, response) => {
     const { first_name, last_name } = request.query;
     const db = dbService.getDbServiceInstance();
@@ -102,7 +102,7 @@ app.get('/searchByName', (request, response) => {
         .catch(err => console.log(err));
 });
 
-// 💰 Search users whose salary is between X and Y
+// Search users whose salary is between X and Y
 app.get('/searchBySalaryRange', (request, response) => {
     const { minSalary, maxSalary } = request.query;
     const db = dbService.getDbServiceInstance();
@@ -114,7 +114,7 @@ app.get('/searchBySalaryRange', (request, response) => {
         .catch(err => console.log(err));
 });
 
-// 🕓 Search users registered after John (userid)
+// Search users registered after John (userid)
 app.get('/searchRegisteredAfter/:userid', (request, response) => {
     const { userid } = request.params;
     const db = dbService.getDbServiceInstance();
@@ -126,7 +126,7 @@ app.get('/searchRegisteredAfter/:userid', (request, response) => {
         .catch(err => console.log(err));
 });
 
-// 📅 Search users registered same day as John (userid)
+// Search users registered same day as John (userid)
 app.get('/searchRegisteredSameDay/:userid', (request, response) => {
     const { userid } = request.params;
     const db = dbService.getDbServiceInstance();

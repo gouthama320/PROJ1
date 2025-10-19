@@ -1,4 +1,3 @@
-// ✅ Keep only ONE signup event listener
 document.addEventListener('DOMContentLoaded', function() {
     const signupBtn = document.querySelector("#signup-btn");
     signupBtn.addEventListener("click", () => {
