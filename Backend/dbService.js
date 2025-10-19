@@ -243,9 +243,10 @@ class DbService{
                     SELECT * FROM users 
                     WHERE DATE(signup_date) = (
                         SELECT DATE(signup_date) FROM users WHERE username = ?
-                    );
+                    )
+                    AND username <> ?;
                 `;
-                connection.query(query, [userid], (err, results) => {
+                connection.query(query, [userid, userid], (err, results) => {
                     if (err) reject(new Error(err.message));
                     else resolve(results);
                 });
