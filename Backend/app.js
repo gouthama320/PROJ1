@@ -32,6 +32,7 @@ app.post('/addUser', (request, response) => {
       });
 });
 
+// Login the user given a correct username and password combination
 app.post("/loginUser", (request, response) => {
     const { username, password } = request.body;
     const db = dbService.getDbServiceInstance();
@@ -43,9 +44,9 @@ app.post("/loginUser", (request, response) => {
       .catch(err => console.log(err));
 });
 
-app.get('/search/:userid', (request, response) => {
+// Search users by userid (username)
+app.get('/searchUserId/:userid', (request, response) => {
     const {userid} = request.params;
-
     const db = dbService.getDbServiceInstance();
 
     const result =  db.userIdSearch(userid); 
@@ -55,7 +56,19 @@ app.get('/search/:userid', (request, response) => {
     .catch(err => console.log(err));
 });
 
-// Request is unused, needs to be there so it doesn't think the response is a request and throws an error
+// Search users by age range
+app.get('/ageRangeSearch', (request, response) => {
+    const {minAge, maxAge} = request.query;
+    const db = dbService.getDbServiceInstance();
+
+    const result =  db.ageRangeSearch(minAge, maxAge); 
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+});
+
+// Search users that haven't signed in. "request" is unused, must be a parameter so "response" isn't mistaken for a request and throws an error
 app.get('/nullLogin', (request, response) => {
     const db = dbService.getDbServiceInstance();
 
@@ -66,6 +79,7 @@ app.get('/nullLogin', (request, response) => {
     .catch(err => console.log(err));
 });
 
+// Search users that signed up today
 app.get('/signupToday', (request, response) => {
     const db = dbService.getDbServiceInstance();
 

@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     
     loginBtn.addEventListener("click", () => {
-        const username = document.querySelector("#user-input").value.trim();
-        const password = document.querySelector("#pass-input").value.trim();
+        const username = document.querySelector("#user-input").value;
+        const password = document.querySelector("#pass-input").value;
 
         if (!username || !password) {
             alert("The username and/or password was not entered.");
@@ -102,17 +102,38 @@ useridSearchBtn.onclick = function (){
     const useridSearchValue = useridSearchInput.value;
     useridSearchValue.value = "";
 
-    fetch('http://localhost:5050/search/' + useridSearchValue)
+    fetch('http://localhost:5050/searchUserId/' + useridSearchValue)
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#userid-search").value = ""
+    })
+    .catch(err => console.error("Userid search error:", err));
 }
+
+// Users between age range event listener
+const ageSearchBtn = document.querySelector('#ageSearch-btn');
+ageSearchBtn.onclick = function () {
+    const minAge = document.querySelector('#minAge-search').value.trim();
+    const maxAge = document.querySelector('#maxAge-search').value.trim();
+
+    fetch(`http://localhost:5050/ageRangeSearch?minAge=${minAge}&maxAge=${maxAge}`)
+    .then(response => response.json())
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#minAge-search").value = ""
+        document.querySelector("#maxAge-search").value = ""
+    })
+    .catch(err => console.error("Age range search error:", err));
+};
 
 // Users that never logged in search button event listener 
 const nullLoginSearchBtn =  document.querySelector('#nullLoginSearch-btn');
 nullLoginSearchBtn.onclick = function (){
     fetch('http://localhost:5050/nullLogin')
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => searchResultsTable(data['data']))
+    .catch(err => console.error("Users not logged in search error:", err));
 }
 
 // Users that signed up today search button event listener 
@@ -120,7 +141,8 @@ const signupTodaySearchBtn =  document.querySelector('#signupTodaySearch-btn');
 signupTodaySearchBtn.onclick = function (){
     fetch('http://localhost:5050/signupToday')
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => searchResultsTable(data['data']))
+    .catch(err => console.error("Users signed up today search error:", err));
 }
 
 // Search by first and/or last name
@@ -131,7 +153,12 @@ nameSearchBtn.onclick = function () {
 
     fetch(`http://localhost:5050/searchByName?first_name=${firstName}&last_name=${lastName}`)
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#firstName-search").value = ""
+        document.querySelector("#lastName-search").value = ""
+    })
+    .catch(err => console.error("Users first and/or last name search error:", err));
 };
 
 // Search users whose salary is between X and Y
@@ -142,7 +169,12 @@ salarySearchBtn.onclick = function () {
 
     fetch(`http://localhost:5050/searchBySalaryRange?minSalary=${minSalary}&maxSalary=${maxSalary}`)
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#minSalary-search").value = ""
+        document.querySelector("#maxSalary-search").value = ""
+    })
+    .catch(err => console.error("Users salary range search error:", err));
 };
 
 // Search users registered after John (userid)
@@ -152,7 +184,11 @@ afterUserSearchBtn.onclick = function () {
 
     fetch(`http://localhost:5050/searchRegisteredAfter/${userid}`)
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#afterUser-search").value = ""
+    })
+    .catch(err => console.error("Users registered after john search error:", err));
 };
 
 // Search users registered same day as John (userid)
@@ -162,7 +198,11 @@ sameDayUserSearchBtn.onclick = function () {
 
     fetch(`http://localhost:5050/searchRegisteredSameDay/${userid}`)
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']));
+    .then(data => {
+        searchResultsTable(data['data'])
+        document.querySelector("#sameDayUser-search").value = ""
+    })
+    .catch(err => console.error("Users registered after john search error:", err));
 };
 
 function searchResultsTable(data){
@@ -173,7 +213,6 @@ function searchResultsTable(data){
         return;
     }
 
-
     let tableHtml = "";
     data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
         tableHtml += "<tr>";
@@ -183,8 +222,10 @@ function searchResultsTable(data){
         tableHtml +=`<td>${last_name}</td>`;
         tableHtml +=`<td>${salary}</td>`;
         tableHtml +=`<td>${age}</td>`;
-        tableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`; // Format signup_date as MM/DD/YYYY
-        tableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`; // Format last_login as MM/DD/YYYY, HH:MM:SS AM/PM
+        // Format signup_date as MM/DD/YYYY
+        tableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`;
+        // Ternary operation to format last_login as "MM/DD/YYYY, HH:MM:SS AM/PM" for users that have signed in or "NULL" if not
+        tableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`;
         tableHtml += "</tr>";
     });
 

@@ -123,6 +123,24 @@ class DbService{
         }
     }
 
+    async ageRangeSearch(min_age, max_age){
+        try{
+             const response = await new Promise((resolve, reject) => 
+                  {
+                     const query = "SELECT * FROM users WHERE age BETWEEN ? AND ?;";
+                     connection.query(query, [min_age, max_age], (err, results) => {
+                         if(err) reject(new Error(err.message));
+                         else resolve(results);
+                     });
+                  }
+             );
+             return response;
+
+         } catch(err) {
+            throw err;
+        }
+    }
+
     async nullLoginSearch(){
         try{
              const response = await new Promise((resolve, reject) => 
