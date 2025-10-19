@@ -9,42 +9,44 @@
 <body>
   <main>
     <h1><u>DB PROJECT 1:</u></h1>
-    
-    <h2>Sign Up</h2>
-    <label>First Name:</label>
-    <input type="text" id="signup-firstname">
-    <br><br>
-    <label>Last Name:</label>
-    <input type="text" id="signup-lastname">
-    <br><br>
-    <label>Age:</label>
-    <input type="number" id="signup-age">
-    <br><br>
-    <label>Salary:</label>
-    <input type="number" id="signup-salary" step="0.01">
-    <br><br>
-    <label>Username:</label>
-    <input type="text" id="signup-username">
-    <br><br>
-    <label>Password:</label>
-    <input type="password" id="signup-password">
-    <br><br>
-    <button id="signup-btn">Sign Up</button>
 
-    <br><br><br>
+    <!-- 🔹 AUTH SECTION (Sign Up + Login) -->
+    <div id="auth-section">
+      <h2>Sign Up</h2>
+      <label>First Name:</label>
+      <input type="text" id="signup-firstname">
+      <br><br>
+      <label>Last Name:</label>
+      <input type="text" id="signup-lastname">
+      <br><br>
+      <label>Age:</label>
+      <input type="number" id="signup-age">
+      <br><br>
+      <label>Salary:</label>
+      <input type="number" id="signup-salary" step="0.01">
+      <br><br>
+      <label>Username:</label>
+      <input type="text" id="signup-username">
+      <br><br>
+      <label>Password:</label>
+      <input type="password" id="signup-password">
+      <br><br>
+      <button id="signup-btn">Sign Up</button>
 
-    <h2>Login</h2>
-    <label>Username:</label>
-    <input type="text" id="user-input">
-    <br><br>
-    <label>Password:</label>
-    <input type="password" id="pass-input">
-    <br><br>
-    <button id="login-btn">Login</button>
+      <br><br><br>
 
-    <br><br><br>
+      <h2>Login</h2>
+      <label>Username:</label>
+      <input type="text" id="user-input">
+      <br><br>
+      <label>Password:</label>
+      <input type="password" id="pass-input">
+      <br><br>
+      <button id="login-btn">Login</button>
+    </div>
 
-    <div id="profile-section">
+    <!-- 🔹 PROFILE SECTION (Visible after login) -->
+    <div id="profile-section" style="display: none;">
       <div id="profile-toggle">
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" id="profile-icon">
         <span id="profile-name"></span>
@@ -52,55 +54,55 @@
       <button id="logout-btn">Sign Out</button>
     </div>
 
-    <label>Search by userid:</label>
-    <input type="text" id="userid-search">
-    <button id="useridSearch-btn">Search</button>
-    <br><br>
-    <label>Search by age range:</label>
-    <input type="number" id="minAge-search" placeholder="Min age" min="1">
-    <input type="number" id="maxAge-search" placeholder="Max age">
-    <button id="ageSearch-btn">Search</button>
-    <br><br>
-    <label>Search for users who never logged in:</label>
-    <button id="nullLoginSearch-btn">Search</button>
-    <br><br>
-    <label>Search for users who signed up today:</label>
-    <button id="signupTodaySearch-btn">Search</button>
-    <br><br>
-    <label>Search by first and/or last name:</label>
-    <input type="text" id="firstName-search" placeholder="First name">
-    <input type="text" id="lastName-search" placeholder="Last name">
-    <button id="nameSearch-btn">Search</button>
+    <!-- 🔹 SEARCH SECTION (Visible after login) -->
+    <div id="search-section" style="display: none;">
+      <label>Search by userid:</label>
+      <input type="text" id="userid-search">
+      <button id="useridSearch-btn">Search</button>
+      <br><br>
+      <label>Search by age range:</label>
+      <input type="number" id="minAge-search" placeholder="Min age" min="1">
+      <input type="number" id="maxAge-search" placeholder="Max age">
+      <button id="ageSearch-btn">Search</button>
+      <br><br>
+      <label>Search for users who never logged in:</label>
+      <button id="nullLoginSearch-btn">Search</button>
+      <br><br>
+      <label>Search for users who signed up today:</label>
+      <button id="signupTodaySearch-btn">Search</button>
+      <br><br>
+      <label>Search by first and/or last name:</label>
+      <input type="text" id="firstName-search" placeholder="First name">
+      <input type="text" id="lastName-search" placeholder="Last name">
+      <button id="nameSearch-btn">Search</button>
+      <br><br>
+      <label>Search by salary range:</label>
+      <input type="number" id="minSalary-search" placeholder="Min salary">
+      <input type="number" id="maxSalary-search" placeholder="Max salary">
+      <button id="salarySearch-btn">Search</button>
+      <br><br>
+      <label>Search users who registered after a given username:</label>
+      <input type="text" id="afterUser-search" placeholder="Enter username">
+      <button id="afterUserSearch-btn">Search</button>
+      <br><br>
+      <label>Search users who registered on the same day as a given username:</label>
+      <input type="text" id="sameDayUser-search" placeholder="Enter username">
+      <button id="sameDayUserSearch-btn">Search</button>
 
-    <br><br>
-    <label>Search by salary range:</label>
-    <input type="number" id="minSalary-search" placeholder="Min salary">
-    <input type="number" id="maxSalary-search" placeholder="Max salary">
-    <button id="salarySearch-btn">Search</button>
-
-    <br><br>
-    <label>Search users who registered after a given username:</label>
-    <input type="text" id="afterUser-search" placeholder="Enter username">
-    <button id="afterUserSearch-btn">Search</button>
-
-    <br><br>
-    <label>Search users who registered on the same day as a given username:</label>
-    <input type="text" id="sameDayUser-search" placeholder="Enter username">
-    <button id="sameDayUserSearch-btn">Search</button>
-
-    <table id="search-results">
-      <thead>
-          <th>Username</th>
-          <th>Password</th>
-          <th>first_name</th>
-          <th>last_name</th>
-          <th>salary</th>
-          <th>age</th>
-          <th>signup_date</th>
-          <th>last_login</th>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <table id="search-results">
+        <thead>
+            <th>Username</th>
+            <th>Password</th>
+            <th>first_name</th>
+            <th>last_name</th>
+            <th>salary</th>
+            <th>age</th>
+            <th>signup_date</th>
+            <th>last_login</th>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </main>
 
   <script src="index.js"></script>

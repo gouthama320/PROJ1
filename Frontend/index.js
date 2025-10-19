@@ -48,12 +48,20 @@ document.addEventListener("DOMContentLoaded", function() {
     // Show/hide the profile section based on user login status, hide logout button by default
     function updateUI() {
         const currentUser = localStorage.getItem("loggedInUser");
+        const authSection = document.querySelector("#auth-section");
+        const profileSection = document.querySelector("#profile-section");
+        const searchSection = document.querySelector("#search-section");
+
         if (currentUser) {
+            authSection.style.display = "none";
             profileSection.style.display = "flex";
+            searchSection.style.display = "block";
             profileName.textContent = currentUser;
             logoutBtn.style.display = "none";
         } else {
+            authSection.style.display = "block";
             profileSection.style.display = "none";
+            searchSection.style.display = "none";
         }
     }
 
