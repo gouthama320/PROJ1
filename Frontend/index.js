@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Login page event listener for username & password input fields
 document.addEventListener("DOMContentLoaded", function() {
     const loginBtn = document.querySelector("#login-btn");
-    const profileSection = document.querySelector("#profile-section");
-    const profileName = document.querySelector("#profile-name");
     const profileToggle = document.querySelector("#profile-toggle");
     const logoutBtn = document.querySelector("#logout-btn");
 
@@ -49,18 +47,22 @@ document.addEventListener("DOMContentLoaded", function() {
         const currentUser = localStorage.getItem("loggedInUser");
         const authSection = document.querySelector("#auth-section");
         const profileSection = document.querySelector("#profile-section");
-        const searchSection = document.querySelector("#search-section");
+        const profileName = document.querySelector("#profile-name");
+        const queriesSection = document.querySelector("#queries-section");
+        const queryResults = document.querySelector("#query-results");
 
         if (currentUser) {
-            authSection.style.display = "none";
-            profileSection.style.display = "flex";
-            searchSection.style.display = "block";
-            profileName.textContent = currentUser;
-            logoutBtn.style.display = "none";
+            authSection.style.display = "none"; // Hide Sign Up & Login sections when logged in
+            profileSection.style.display = "flex"; // Show the profile section (with a flex display style)
+            queriesSection.style.display = "grid"; // Show the queries section (with a grid display style, 2 rows of 4)
+            profileName.textContent = currentUser; // Set the profile name in the profile section to the logged in username
+            logoutBtn.style.display = "none"; // Hide the log out button by default when logged in
+            queryResults.style.display = "table"; // Show the query results table
         } else {
-            authSection.style.display = "block";
-            profileSection.style.display = "none";
-            searchSection.style.display = "none";
+            authSection.style.display = "block"; // Show Sign Up & Login section when not logged in
+            profileSection.style.display = "none"; // Hide the profile section
+            queriesSection.style.display = "none"; // Hide the queries section
+            queryResults.style.display = "none"; // Hide the query results table
         }
     }
 

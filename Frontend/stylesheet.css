@@ -26,7 +26,7 @@ main {
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
   text-align: center;
   width: 90%;
-  max-width: 500px;
+  max-width: none;
 }
 
 /* Headings */
@@ -43,16 +43,18 @@ h2 {
 /* Label and input alignment */
 label {
   display: block;
-  text-align: left;
-  margin-left: 10%;
-  margin-bottom: 5px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto 5px;
+  max-width: 320px;   /* Same as input fields */
 }
 
 input[type="text"],
 input[type="password"],
 input[type="number"] {
   display: block;
-  width: 80%;
+  width: 100%;
+  max-width: 320px;
   margin: 0 auto 15px auto;
   padding: 10px;
   border: none;
@@ -108,9 +110,21 @@ th {
   color: #00bfff;
 }
 
+#queries-section {
+  grid-template-columns: repeat(4, 1fr); /* 4 search groups per row */
+  gap: 20px;
+  align-items: start; /* Top align search groups */
+}
+
+.query-group {
+  background-color: #1a1a1a;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+}
+
 /* Profile section styling */
 #profile-section {
-  display: none;                  /* Hidden until logged in */
   position: fixed;
   top: 10px;
   right: 20px;
@@ -138,7 +152,6 @@ th {
 }
 
 #logout-btn {
-  display: none;                  /* Hidden until profile-toggle is used */
   margin-top: 6px;
   background-color: #ff6666;
   color: white;

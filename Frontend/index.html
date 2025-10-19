@@ -8,9 +8,9 @@
 </head>
 <body>
   <main>
-    <h1><u>DB PROJECT 1:</u></h1>
+    <h1><u>CSC 6710 - PROJECT 1:</u></h1>
 
-    <!-- (Sign Up + Login) -->
+    <!-- Sign Up & Login sections, hide them after logging in -->
     <div id="auth-section">
       <h2>Sign Up</h2>
       <label>First Name:</label>
@@ -45,8 +45,8 @@
       <button id="login-btn">Login</button>
     </div>
 
-    <!-- PROFILE SECTION (Visible after login) -->
-    <div id="profile-section" style="display: none;">
+    <!-- Toggleable profile section, only accessible to logged in users -->
+    <div id="profile-section">
       <div id="profile-toggle">
         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" id="profile-icon">
         <span id="profile-name"></span>
@@ -54,57 +54,66 @@
       <button id="logout-btn">Sign Out</button>
     </div>
 
-    <!-- SEARCH SECTION (Visible after login) -->
-    <div id="search-section" style="display: none;">
-      <label>Search by userid:</label>
-      <input type="text" id="userid-search">
-      <button id="useridSearch-btn">Search</button>
-      <br><br>
-      <label>Search by age range:</label>
-      <input type="number" id="minAge-search" placeholder="Min age" min="1">
-      <input type="number" id="maxAge-search" placeholder="Max age">
-      <button id="ageSearch-btn">Search</button>
-      <br><br>
-      <label>Search for users who never logged in:</label>
-      <button id="nullLoginSearch-btn">Search</button>
-      <br><br>
-      <label>Search for users who signed up today:</label>
-      <button id="signupTodaySearch-btn">Search</button>
-      <br><br>
-      <label>Search by first and/or last name:</label>
-      <input type="text" id="firstName-search" placeholder="First name">
-      <input type="text" id="lastName-search" placeholder="Last name">
-      <button id="nameSearch-btn">Search</button>
-      <br><br>
-      <label>Search by salary range:</label>
-      <input type="number" id="minSalary-search" placeholder="Min salary">
-      <input type="number" id="maxSalary-search" placeholder="Max salary">
-      <button id="salarySearch-btn">Search</button>
-      <br><br>
-      <label>Search users who registered after a given username:</label>
-      <input type="text" id="afterUser-search" placeholder="Enter username">
-      <button id="afterUserSearch-btn">Search</button>
-      <br><br>
-      <label>Search users who registered on the same day as a given username:</label>
-      <input type="text" id="sameDayUser-search" placeholder="Enter username">
-      <button id="sameDayUserSearch-btn">Search</button>
-
-      <table id="search-results">
-        <thead>
-            <th>Username</th>
-            <th>Password</th>
-            <th>first_name</th>
-            <th>last_name</th>
-            <th>salary</th>
-            <th>age</th>
-            <th>signup_date</th>
-            <th>last_login</th>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- Search section, only accessible to logged in users -->
+    <div id="queries-section">
+      <div class="query-group">
+        <label>Search by first and/or last name:</label>
+        <input type="text" id="firstName-search" placeholder="First name">
+        <input type="text" id="lastName-search" placeholder="Last name">
+        <button id="nameSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search by user id:</label>
+        <input type="text" id="userid-search" placeholder="User id">
+        <button id="useridSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search by salary range:</label>
+        <input type="number" id="minSalary-search" placeholder="Min salary">
+        <input type="number" id="maxSalary-search" placeholder="Max salary">
+        <button id="salarySearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search by age range:</label>
+        <input type="number" id="minAge-search" placeholder="Min age" min="1">
+        <input type="number" id="maxAge-search" placeholder="Max age">
+        <button id="ageSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search users who registered after a given username:</label>
+        <input type="text" id="afterUser-search" placeholder="Enter username">
+        <button id="afterUserSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search users who never logged in:</label>
+        <button id="nullLoginSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search users who registered on the same day as a given username:</label>
+        <input type="text" id="sameDayUser-search" placeholder="Enter username">
+        <button id="sameDayUserSearch-btn">Search</button>
+      </div>
+      <div class="query-group">
+        <label>Search users who signed up today:</label>
+        <button id="signupTodaySearch-btn">Search</button>
+      </div>
     </div>
-  </main>
 
+    <!-- Query results section, only visible once logged in -->
+    <table id="query-results">
+      <thead>
+        <th>Username</th>
+        <th>Password</th>
+        <th>first_name</th>
+        <th>last_name</th>
+        <th>salary</th>
+        <th>age</th>
+        <th>signup_date</th>
+        <th>last_login</th>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
   <script src="index.js"></script>
 </body>
 </html>
