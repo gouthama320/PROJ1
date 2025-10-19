@@ -108,9 +108,44 @@ th {
   color: #00bfff;
 }
 
-/* Update section */
-#update-row {
-  margin-top: 20px;
+/* Profile section styling */
+#profile-section {
+  display: none;                  /* Hidden until logged in */
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;         /* Vertical layout */
+  align-items: flex-end;          /* Right-most flex align */
+}
+
+/* Profile icon and username are side-by-side and clickable */
+#profile-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+#profile-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+#profile-name {
+  font-weight: bold;
+}
+
+#logout-btn {
+  display: none;                  /* Hidden until profile-toggle is used */
+  margin-top: 6px;
+  background-color: #ff6666;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
 }
 
 /* Section spacing */

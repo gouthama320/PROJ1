@@ -40,30 +40,40 @@ document.addEventListener('DOMContentLoaded', function() {
 // Login page event listener for username & password input fields
 document.addEventListener("DOMContentLoaded", function() {
     const loginBtn = document.querySelector("#login-btn");
-    const loggedInSection = document.querySelector("#logged-in-section");
-    const loggedInMessage = document.querySelector("#logged-in-message");
+    const profileSection = document.querySelector("#profile-section");
+    const profileName = document.querySelector("#profile-name");
+    const profileToggle = document.querySelector("#profile-toggle");
     const logoutBtn = document.querySelector("#logout-btn");
 
-    // Show/hide the logout button and logged in message based on user login status
+    // Show/hide the profile section based on user login status, hide logout button by default
     function updateUI() {
         const currentUser = localStorage.getItem("loggedInUser");
         if (currentUser) {
-            loggedInSection.style.display = "block";
-            loggedInMessage.textContent = `You are logged in, ${currentUser}!`;
+            profileSection.style.display = "flex";
+            profileName.textContent = currentUser;
+            logoutBtn.style.display = "none";
         } else {
-            loggedInSection.style.display = "none";
+            profileSection.style.display = "none";
         }
     }
 
     // Check the login in status on page load
     updateUI();
 
-    // Log out button event listen
+    // Clicking the profile section (with the icon & username) toggles the logout button
+    profileToggle.addEventListener("click", () => {
+    logoutBtn.style.display =
+        logoutBtn.style.display === "none" ? "inline-block" : "none";
+    });
+    
+    // Log out button event listener
     logoutBtn.addEventListener("click", () => {
+        alert("User logged out successfully!");
         localStorage.removeItem("loggedInUser");
         updateUI();
     });
     
+    // Log in button event listener
     loginBtn.addEventListener("click", () => {
         const username = document.querySelector("#user-input").value;
         const password = document.querySelector("#pass-input").value;
@@ -81,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                alert("User logged in successfully!");
                 localStorage.setItem("loggedInUser", username); // If login is successful, keep the user logged in
                 updateUI();
 
