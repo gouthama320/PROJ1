@@ -272,7 +272,7 @@ function searchResultsTable(query_data, columnsToShow = []) {
     // Show the query results table, the idea is to only show when any of the search buttons (that call this function) are clicked
     queryResults.style.display = "table";
 
-    // Prevent previous results to prevent leftover columns in queries with no results
+    // Prevent leftover columns from a previous query from appearing in a query with no results
     queryTableHead.innerHTML = "";
     queryTableBody.innerHTML = "";
 
