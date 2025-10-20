@@ -1,0 +1,13 @@
+CREATE DATABASE web_app;
+USE web_app;
+
+CREATE TABLE Users(
+   username VARCHAR(50) primary key,
+   password VARCHAR(60),
+   first_name VARCHAR(50),
+   last_name VARCHAR(50),
+   salary FLOAT,
+   age INTEGER,
+   signup_date DATE,
+   last_login DATETIME
+)
