@@ -2,10 +2,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     const inputFields = document.querySelectorAll("input");
     inputFields.forEach(input => input.value = "");
-});
 
-// Sign up event listener
-document.addEventListener('DOMContentLoaded', function() {
+    // Sign up implementation
     const signupBtn = document.querySelector("#signup-btn");
     signupBtn.addEventListener("click", () => {
         const first_name = document.querySelector("#signup-firstname").value.trim();
@@ -41,10 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => console.error("Signup error:", err));
     });
-});
 
-// Login page event listener for username & password input fields
-document.addEventListener("DOMContentLoaded", function() {
+    // Login page implementation
     const loginBtn = document.querySelector("#login-btn");
     const profileToggle = document.querySelector("#profile-toggle");
     const logoutBtn = document.querySelector("#logout-btn");
@@ -64,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
             profileSection.style.display = "flex"; // Show the profile section (with a flex display style)
             queriesSection.style.display = "grid"; // Show the queries section (with a grid display style, 2 rows of 4)
             profileName.textContent = currentUser; // Set the profile name in the profile section to the logged in username
-            logoutBtn.style.display = "none"; // Hide the log out button by default when logged in
+            logoutBtn.style.display = "none"; // Hide the logout button by default when logged in
             queryResults.style.display = "table"; // Show the query results table
             if (queryBody) queryBody.innerHTML = ''; // Clear the query results table on login
         } else {
@@ -76,28 +72,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Check the login in status on page load
+    // Check the login status on page load
     updateUI();
-
-    // Toggle off the log out button when clicking on the page document
-    document.addEventListener("click", () => {
-        logoutBtn.style.display = "none";
-    });
-
-    // Clicking the profile section (with the icon & username) toggles the logout button
-    profileToggle.addEventListener("click", (event) => {
-        event.stopPropagation(); // Exception to the document event listener above since the profile section should toggle the log out button
-        logoutBtn.style.display = logoutBtn.style.display === "none" ? "inline-block" : "none";
-    });
     
-    // Log out button event listener
-    logoutBtn.addEventListener("click", () => {
-        alert("User logged out successfully!");
-        localStorage.removeItem("loggedInUser");
-        updateUI();
-    });
-    
-    // Log in button event listener
+    // Login button event listener
     loginBtn.addEventListener("click", () => {
         const username = document.querySelector("#user-input").value;
         const password = document.querySelector("#pass-input").value;
@@ -128,9 +106,27 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(err => console.error("Login error:", err));
     });
+
+    // Page document event listener for toggling off the logout button when clicking outside the profile section
+    document.addEventListener("click", () => {
+        logoutBtn.style.display = "none";
+    });
+
+    // Profile section event listener, clicking the profile section (with the icon & username) toggles the logout button
+    profileToggle.addEventListener("click", (event) => {
+        event.stopPropagation(); // Exception to the document event listener above since the profile section should toggle the logout button
+        logoutBtn.style.display = logoutBtn.style.display === "none" ? "inline-block" : "none";
+    });
+    
+    // Logout button event listener
+    logoutBtn.addEventListener("click", () => {
+        alert("User logged out successfully!");
+        localStorage.removeItem("loggedInUser");
+        updateUI();
+    });
 });
 
-// Userid search button event listener 
+// Userid search
 const useridSearchBtn =  document.querySelector('#useridSearch-btn');
 useridSearchBtn.onclick = function (){
     const useridSearchInput = document.querySelector('#userid-search');
@@ -145,7 +141,7 @@ useridSearchBtn.onclick = function (){
     .catch(err => console.error("Userid search error:", err));
 }
 
-// Users between age range event listener
+// Users between age range search
 const ageSearchBtn = document.querySelector('#ageSearch-btn');
 ageSearchBtn.onclick = function () {
     const minAge = document.querySelector('#minAge-search').value.trim();
@@ -161,18 +157,18 @@ ageSearchBtn.onclick = function () {
     .catch(err => console.error("Age range search error:", err));
 };
 
-// Users that never logged in search button event listener 
+// Users that never logged in search
 const nullLoginSearchBtn =  document.querySelector('#nullLoginSearch-btn');
-nullLoginSearchBtn.onclick = function (){
+nullLoginSearchBtn.onclick = function () {
     fetch('http://localhost:5050/nullLogin')
     .then(response => response.json())
     .then(data => searchResultsTable(data['data']))
     .catch(err => console.error("Users not logged in search error:", err));
 }
 
-// Users that signed up today search button event listener 
+// Users that signed up today search
 const signupTodaySearchBtn =  document.querySelector('#signupTodaySearch-btn');
-signupTodaySearchBtn.onclick = function (){
+signupTodaySearchBtn.onclick = function () {
     fetch('http://localhost:5050/signupToday')
     .then(response => response.json())
     .then(data => searchResultsTable(data['data']))
@@ -239,11 +235,11 @@ sameDayUserSearchBtn.onclick = function () {
     .catch(err => console.error("Users registered after john search error:", err));
 };
 
-function searchResultsTable(query_data){
+function searchResultsTable(query_data) {
     const queryResultsTable = document.querySelector('#query-results tbody'); 
     
     if(query_data.length === 0){
-        queryResultsTable.innerHTML = "<tr><td class='no-data' colspan='8'>No Data</td></tr>";
+        queryResultsTable.innerHTML = "<tr><td colspan='8'>No results</td></tr>";
         return;
     }
 
