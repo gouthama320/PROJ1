@@ -1,7 +1,6 @@
-// Clear all input fields on page reload
 document.addEventListener("DOMContentLoaded", function() {
     const inputFields = document.querySelectorAll("input");
-    inputFields.forEach(input => input.value = "");
+    inputFields.forEach(input => input.value = ""); // Clear all input fields on page reload
 
     // Sign up implementation
     const signupBtn = document.querySelector("#signup-btn");
@@ -129,8 +128,12 @@ document.addEventListener("DOMContentLoaded", function() {
 // Userid search
 const useridSearchBtn =  document.querySelector('#useridSearch-btn');
 useridSearchBtn.onclick = function (){
-    const useridSearchInput = document.querySelector('#userid-search');
-    const useridSearchValue = useridSearchInput.value;
+    const useridSearchValue = document.querySelector('#userid-search').value.trim();
+    
+    if(!useridSearchValue) {
+        alert("Userid search input field is empty.");
+        return;
+    }
 
     fetch('http://localhost:5050/searchUserId/' + useridSearchValue)
     .then(response => response.json())
@@ -146,6 +149,11 @@ const ageSearchBtn = document.querySelector('#ageSearch-btn');
 ageSearchBtn.onclick = function () {
     const minAge = document.querySelector('#minAge-search').value.trim();
     const maxAge = document.querySelector('#maxAge-search').value.trim();
+
+    if(!minAge || !maxAge) {
+        alert("Age range search input field(s) are empty.");
+        return;
+    }
 
     fetch(`http://localhost:5050/ageRangeSearch?minAge=${minAge}&maxAge=${maxAge}`)
     .then(response => response.json())
@@ -181,6 +189,11 @@ nameSearchBtn.onclick = function () {
     const firstName = document.querySelector('#firstName-search').value.trim();
     const lastName = document.querySelector('#lastName-search').value.trim();
 
+    if(!firstName || !lastName) {
+        alert("First and/or last name search input field(s) are empty.");
+        return;
+    }
+
     fetch(`http://localhost:5050/searchByName?first_name=${firstName}&last_name=${lastName}`)
     .then(response => response.json())
     .then(data => {
@@ -197,6 +210,11 @@ salarySearchBtn.onclick = function () {
     const minSalary = document.querySelector('#minSalary-search').value.trim();
     const maxSalary = document.querySelector('#maxSalary-search').value.trim();
 
+    if(!minSalary || !maxSalary) {
+        alert("Salary range search input field(s) are empty.");
+        return;
+    }
+
     fetch(`http://localhost:5050/searchBySalaryRange?minSalary=${minSalary}&maxSalary=${maxSalary}`)
     .then(response => response.json())
     .then(data => {
@@ -212,6 +230,11 @@ const afterUserSearchBtn = document.querySelector('#afterUserSearch-btn');
 afterUserSearchBtn.onclick = function () {
     const userid = document.querySelector('#afterUser-search').value.trim();
 
+    if(!userid) {
+        alert("After user registration search input field is empty.");
+        return;
+    }
+
     fetch(`http://localhost:5050/searchRegisteredAfter/${userid}`)
     .then(response => response.json())
     .then(data => {
@@ -225,6 +248,11 @@ afterUserSearchBtn.onclick = function () {
 const sameDayUserSearchBtn = document.querySelector('#sameDayUserSearch-btn');
 sameDayUserSearchBtn.onclick = function () {
     const userid = document.querySelector('#sameDayUser-search').value.trim();
+    
+    if(!userid) {
+        alert("Same day user registration search input field is empty.");
+        return;
+    }
 
     fetch(`http://localhost:5050/searchRegisteredSameDay/${userid}`)
     .then(response => response.json())
@@ -235,6 +263,7 @@ sameDayUserSearchBtn.onclick = function () {
     .catch(err => console.error("Users registered after john search error:", err));
 };
 
+// Function for showing query results in a table that differs in what columns are shown
 function searchResultsTable(query_data, columnsToShow = []) {
     const queryResults = document.querySelector("#query-results");
     const queryTableHead = document.querySelector('#query-results thead'); 
@@ -243,9 +272,13 @@ function searchResultsTable(query_data, columnsToShow = []) {
     // Show the query results table, the idea is to only show when any of the search buttons (that call this function) are clicked
     queryResults.style.display = "table";
 
-    // If the query does not have a result, indicate this through text in the table
-    if(query_data.length === 0){
-        queryTableBody.innerHTML = "<tr><td colspan='8'>No results</td></tr>";
+    // Prevent previous results to prevent leftover columns in queries with no results
+    queryTableHead.innerHTML = "";
+    queryTableBody.innerHTML = "";
+
+    // If the query does not have a result, indicate this through HTML text
+    if (query_data.length === 0) {
+        queryTableBody.innerHTML = "<h2>No results for the query</h2>";
         return;
     }
 
