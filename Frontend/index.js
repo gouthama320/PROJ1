@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
             queriesSection.style.display = "grid"; // Show the queries section (with a grid display style, 2 rows of 4)
             profileName.textContent = currentUser; // Set the profile name in the profile section to the logged in username
             logoutBtn.style.display = "none"; // Hide the logout button by default when logged in
-            queryResults.style.display = "table"; // Show the query results table
+            queryResults.style.display = "none"; // Hide the query results table, until a query is made
             if (queryBody) queryBody.innerHTML = ''; // Clear the query results table on login
         } else {
             authSection.style.display = "block"; // Show Sign Up & Login section when not logged in
@@ -135,7 +135,7 @@ useridSearchBtn.onclick = function (){
     fetch('http://localhost:5050/searchUserId/' + useridSearchValue)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['username', 'salary', 'age', 'signup_date', 'last_login'])
         document.querySelector("#userid-search").value = ""
     })
     .catch(err => console.error("Userid search error:", err));
@@ -150,7 +150,7 @@ ageSearchBtn.onclick = function () {
     fetch(`http://localhost:5050/ageRangeSearch?minAge=${minAge}&maxAge=${maxAge}`)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'age'])
         document.querySelector("#minAge-search").value = ""
         document.querySelector("#maxAge-search").value = ""
     })
@@ -162,7 +162,7 @@ const nullLoginSearchBtn =  document.querySelector('#nullLoginSearch-btn');
 nullLoginSearchBtn.onclick = function () {
     fetch('http://localhost:5050/nullLogin')
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']))
+    .then(data => searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'last_login']))
     .catch(err => console.error("Users not logged in search error:", err));
 }
 
@@ -171,7 +171,7 @@ const signupTodaySearchBtn =  document.querySelector('#signupTodaySearch-btn');
 signupTodaySearchBtn.onclick = function () {
     fetch('http://localhost:5050/signupToday')
     .then(response => response.json())
-    .then(data => searchResultsTable(data['data']))
+    .then(data => searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'signup_date']))
     .catch(err => console.error("Users signed up today search error:", err));
 }
 
@@ -184,7 +184,7 @@ nameSearchBtn.onclick = function () {
     fetch(`http://localhost:5050/searchByName?first_name=${firstName}&last_name=${lastName}`)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['first_name', 'last_name'])
         document.querySelector("#firstName-search").value = ""
         document.querySelector("#lastName-search").value = ""
     })
@@ -200,7 +200,7 @@ salarySearchBtn.onclick = function () {
     fetch(`http://localhost:5050/searchBySalaryRange?minSalary=${minSalary}&maxSalary=${maxSalary}`)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'salary'])
         document.querySelector("#minSalary-search").value = ""
         document.querySelector("#maxSalary-search").value = ""
     })
@@ -215,7 +215,7 @@ afterUserSearchBtn.onclick = function () {
     fetch(`http://localhost:5050/searchRegisteredAfter/${userid}`)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'signup_date'])
         document.querySelector("#afterUser-search").value = ""
     })
     .catch(err => console.error("Users registered after john search error:", err));
@@ -229,35 +229,44 @@ sameDayUserSearchBtn.onclick = function () {
     fetch(`http://localhost:5050/searchRegisteredSameDay/${userid}`)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'])
+        searchResultsTable(data['data'], ['username', 'first_name', 'last_name', 'signup_date'])
         document.querySelector("#sameDayUser-search").value = ""
     })
     .catch(err => console.error("Users registered after john search error:", err));
 };
 
-function searchResultsTable(query_data) {
-    const queryResultsTable = document.querySelector('#query-results tbody'); 
-    
+function searchResultsTable(query_data, columnsToShow = []) {
+    const queryResults = document.querySelector("#query-results");
+    const queryTableHead = document.querySelector('#query-results thead'); 
+    const queryTableBody = document.querySelector('#query-results tbody');
+
+    // Show the query results table, the idea is to only show when any of the search buttons (that call this function) are clicked
+    queryResults.style.display = "table";
+
+    // If the query does not have a result, indicate this through text in the table
     if(query_data.length === 0){
-        queryResultsTable.innerHTML = "<tr><td colspan='8'>No results</td></tr>";
+        queryTableBody.innerHTML = "<tr><td colspan='8'>No results</td></tr>";
         return;
     }
 
-    let queryTableHtml = "";
-    query_data.forEach(function ({username, password, first_name, last_name, salary, age, signup_date, last_login}){
-        queryTableHtml += "<tr>";
-        queryTableHtml +=`<td>${username}</td>`;
-        queryTableHtml +=`<td>${password}</td>`;
-        queryTableHtml +=`<td>${first_name}</td>`;
-        queryTableHtml +=`<td>${last_name}</td>`;
-        queryTableHtml +=`<td>${salary}</td>`;
-        queryTableHtml +=`<td>${age}</td>`;
-        // Format signup_date as MM/DD/YYYY
-        queryTableHtml +=`<td>${new Date(signup_date).toLocaleDateString()}</td>`;
-        // Ternary operation to format last_login as "MM/DD/YYYY, HH:MM:SS AM/PM" for users that have signed in or "NULL" if not
-        queryTableHtml += `<td>${last_login ? new Date(last_login).toLocaleString() : 'NULL'}</td>`;
-        queryTableHtml += "</tr>";
-    });
+    // Build query search results table header
+    queryTableHead.innerHTML = `
+    <tr>${columnsToShow.map(col => `<th>${col}</th>`).join('')}</tr>`; // Array of HTML column name strings is joined into a single string without commas
 
-    queryResultsTable.innerHTML = queryTableHtml;
+    // Build query search results table body
+    // Array of HTML row result strings is joined into a single string without commas
+    queryTableBody.innerHTML = query_data.map(row => `
+    <tr>
+        ${columnsToShow.map(col => { // Nested mapping of HTML column results
+            let value = row[col]; // Set row results of each column
+            if (col === 'signup_date' && value)
+                // Format signup_date as MM/DD/YYYY
+                value = new Date(value).toLocaleDateString();
+            if (col === 'last_login')
+                // Ternary operation to format last_login as "MM/DD/YYYY, HH:MM:SS AM/PM" for users that have signed in or "NULL" if not
+                value = value ? new Date(value).toLocaleString() : 'NULL';
+            return `<td>${value}</td>`; // Return a mapped row result of a mapped column
+        }).join('')}
+    </tr>
+    `).join('');
 }

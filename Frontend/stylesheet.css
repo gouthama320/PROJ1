@@ -129,8 +129,8 @@ th {
   top: 10px;
   right: 20px;
   display: flex;
-  flex-direction: column;         /* Vertical layout */
-  align-items: flex-end;          /* Right-most flex align */
+  flex-direction: column; /* Vertical layout */
+  align-items: flex-end; /* Right-most flex align */
 }
 
 /* Profile icon and username are side-by-side and clickable */
@@ -142,12 +142,13 @@ th {
 }
 
 #profile-icon {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
 }
 
 #profile-name {
+  font-size: 150%;
   font-weight: bold;
 }
 
@@ -157,7 +158,8 @@ th {
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 6px 10px;
+  padding: 8px 15px;
+  font-size: 15px;
   cursor: pointer;
 }
 
