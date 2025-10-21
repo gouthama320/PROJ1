@@ -12,13 +12,31 @@ CREATE TABLE Users(
    last_login DATETIME
 )
 
+-- Original password: a1 --
+INSERT INTO users VALUES("a1", "$2b$10$t2CfqJ5Kp7HfMBEsfZhTn.FlmCSZwRw0W3hmEYqZAThDlFHjSUvT.", "a", "a", 45000, 15, "2025-10-20", NULL);
+
+-- Original password: ali! --
+INSERT INTO users VALUES("Ali_98!", "$2b$10$TmoyxftJDE9wXV83sOg62.RYQkLqAUaifPBcCunC6yfI0d.Qz4wdu", "Ali", "Alobaidi", 0, 27, "2025-10-20", "2025-10-20 21:55:01");
+
+-- Original password: bill --
+INSERT INTO users VALUES("bobby", "$2b$10$N3vR2Du3wJX5o3ommeUuAOatIXCmCHoQR1/B5AQjuk0XpIY4d6M4i", "bob", "bill", 50000, 25, "2024-05-30", NULL);
+
+-- Original password: password --
+INSERT INTO users VALUES("K1TH", "$2b$10$UpKSgRcgV7yMLFRqZq4GEe6G0heu9zZc2sfWwmGTjr1Cph2pXg/vm", "Kith", "Goutham", 2000000, 23, "2025-08-17", NULL);
+
+-- Original password: mariomario --
+INSERT INTO users VALUES("Mario", "$2b$10$uJtq8.T0/nG/ooUSTIW2L.5D/JG1.qJC1ntL72UKZRy8xU5F4dZr.", "Mario", "Mario", 20000, 40, "2005-02-10", "2025-10-20 21:46:29");
+
+-- Original password: tails --
+INSERT INTO users VALUES("Sonic", "$2b$10$zXKpa61lnEkUnTJ7g5EfJOu5ysM1yFRnfx5HB/yffRo9fkoSi82U.", "Sonic", "Hedgehog", 30000, 34, "1969-04-20", "2025-10-20 21:46:41");
+
 SELECT * FROM users WHERE first_name LIKE "Kith"
 
 SELECT * FROM users WHERE first_name LIKE "Ali" AND last_name LIKE "Alobaidi"
 
-SELECT * FROM users WHERE username = bobby;
+SELECT * FROM users WHERE username = "bobby";
 
-SELECT * FROM users WHERE username = Sonic;
+SELECT * FROM users WHERE username = "Sonic";
 
 SELECT * FROM users WHERE salary BETWEEN 20000 AND 50000;
 
