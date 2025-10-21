@@ -189,7 +189,7 @@ nameSearchBtn.onclick = function () {
     const firstName = document.querySelector('#firstName-search').value.trim();
     const lastName = document.querySelector('#lastName-search').value.trim();
 
-    if(!firstName || !lastName) {
+    if(!firstName && !lastName) {
         alert("First and/or last name search input field(s) are empty.");
         return;
     }
