@@ -138,7 +138,7 @@ useridSearchBtn.onclick = function (){
     fetch('http://localhost:5050/searchUserId/' + useridSearchValue)
     .then(response => response.json())
     .then(data => {
-        searchResultsTable(data['data'], ['username', 'salary', 'age', 'signup_date', 'last_login'])
+        searchResultsTable(data['data'], ['username', 'password', 'first_name', 'last_name', 'salary', 'age', 'signup_date', 'last_login'])
         document.querySelector("#userid-search").value = ""
     })
     .catch(err => console.error("Userid search error:", err));
